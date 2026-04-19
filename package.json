@@ -1,0 +1,23 @@
+{
+  "name": "restaurant-pos-platform",
+  "private": true,
+  "version": "1.0.0",
+  "workspaces": [
+    "server",
+    "client"
+  ],
+  "scripts": {
+    "dev": "concurrently \"cmd /c npm --workspace server run dev\" \"cmd /c npm --workspace client run dev\"",
+    "server": "cmd /c npm --workspace server run dev",
+    "client": "cmd /c npm --workspace client run dev",
+    "seed": "cmd /c npm --workspace server run seed",
+    "build": "cmd /c npm --workspace client run build",
+    "prisma:generate": "cmd /c npm --workspace server run prisma:generate",
+    "prisma:migrate": "cmd /c npm --workspace server run prisma:migrate",
+    "prisma:deploy": "cmd /c npm --workspace server run prisma:deploy",
+    "prisma:seed": "cmd /c npm --workspace server run prisma:seed"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}

@@ -1,0 +1,182 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  admin
+  staff
+}
+
+enum OrderStatus {
+  pending
+  accepted
+  preparing
+  served
+  completed
+  rejected
+}
+
+enum PaymentStatus {
+  pending
+  paid
+  failed
+}
+
+enum OrderType {
+  dine_in
+  delivery
+}
+
+enum SubscriptionPlan {
+  monthly
+  one_time
+}
+
+enum SubscriptionStatus {
+  active
+  pending
+  cancelled
+}
+
+model Restaurant {
+  id                  String             @id @default(cuid())
+  restaurantCode      String             @unique
+  adminCode           String             @unique
+  businessName        String
+  slug                String             @unique
+  ownerName           String
+  phone               String
+  email               String             @unique
+  city                String
+  district            String
+  state               String
+  address             String             @default("")
+  tagline             String             @default("")
+  heroTitle           String             @default("")
+  heroDescription     String             @default("")
+  supportPhone        String             @default("")
+  primaryColor        String             @default("#f97316")
+  secondaryColor      String             @default("#0f172a")
+  logoUrl             String             @default("")
+  themePreference     String             @default("system")
+  deliveryEnabled     Boolean            @default(true)
+  deliveryAccessToken String             @unique
+  subscriptionPlan    SubscriptionPlan
+  subscriptionStatus  SubscriptionStatus @default(active)
+  oneTimeFee          Float              @default(20000)
+  monthlyFee          Float              @default(650)
+  paymentReference    String             @default("")
+  users               User[]
+  categories          Category[]
+  menuItems           MenuItem[]
+  tables              Table[]
+  orders              Order[]
+  orderItems          OrderItem[]
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
+}
+
+model User {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  name         String
+  email        String     @unique
+  phone        String     @default("")
+  adminCode    String     @unique
+  password     String
+  role         Role       @default(staff)
+  isActive     Boolean    @default(true)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Category {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  name         String
+  description  String     @default("")
+  sortOrder    Int        @default(0)
+  items        MenuItem[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([restaurantId, name])
+}
+
+model MenuItem {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  name         String
+  description  String     @default("")
+  price        Float
+  image        String     @default("")
+  isAvailable  Boolean    @default(true)
+  categoryId   String
+  category     Category   @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  orderItems   OrderItem[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+model Table {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  name         String
+  tableNumber  Int
+  seats        Int        @default(4)
+  accessToken  String     @unique
+  qrCodeUrl    String     @default("")
+  isActive     Boolean    @default(true)
+  orders       Order[]
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([restaurantId, name])
+  @@unique([restaurantId, tableNumber])
+}
+
+model Order {
+  id              String        @id @default(cuid())
+  restaurantId    String
+  restaurant      Restaurant    @relation(fields: [restaurantId], references: [id], onDelete: Restrict)
+  tableId         String?
+  table           Table?        @relation(fields: [tableId], references: [id], onDelete: SetNull)
+  orderType       OrderType     @default(dine_in)
+  sourceLabel     String
+  tableName       String?
+  tableNumber     Int?
+  customerName    String        @default("")
+  customerPhone   String        @default("")
+  deliveryAddress String        @default("")
+  status          OrderStatus   @default(pending)
+  totalAmount     Float
+  notes           String        @default("")
+  paymentStatus   PaymentStatus @default(pending)
+  paymentProvider String        @default("razorpay-ready")
+  items           OrderItem[]
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+}
+
+model OrderItem {
+  id           String     @id @default(cuid())
+  restaurantId String
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  orderId      String
+  order        Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId   String
+  menuItem     MenuItem   @relation(fields: [menuItemId], references: [id], onDelete: Restrict)
+  name         String
+  price        Float
+  quantity     Int
+  subtotal     Float
+  image        String     @default("")
+}
