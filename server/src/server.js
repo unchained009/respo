@@ -6,13 +6,11 @@ import { prisma } from './config/prisma.js';
 import { setSocketServer } from './config/socket.js';
 
 dotenv.config();
-import cors from "cors";
+
 
 import cors from "cors";
 
-app.use(cors({
-  origin: "*"
-}));
+
 
 const startServer = async () => {
   await prisma.$connect();
