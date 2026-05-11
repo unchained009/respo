@@ -1,3 +1,5 @@
+import path from 'path';
+import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
 import cors from 'cors';
 import express from 'express';
@@ -16,12 +18,6 @@ dotenv.config();
 
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: process.env.CLIENT_URL,
-//     credentials: true
-//   })
-// );
 app.use(cors({
   origin: "*"
 })); 
@@ -30,7 +26,11 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 app.get('/api/health', (req, res) => {
-  res.json({ message: 'Restaurant POS API is running.' });
+  res.json({ 
+    status: 'online',
+    message: 'respo API is operational.',
+    version: '1.0.0'
+  });
 });
 
 app.use('/api/platform', platformRoutes);
@@ -42,7 +42,20 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/tables', tableRoutes);
 app.use('/api/analytics', analyticsRoutes);
 
-app.use(notFound);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+if (process.env.NODE_ENV === 'production') {
+  const clientPath = path.join(__dirname, '../../client/dist');
+  app.use(express.static(clientPath));
+
+  app.get('*', (req, res) => {
+    res.sendFile(path.resolve(clientPath, 'index.html'));
+  });
+} else {
+  app.use(notFound);
+}
+
 app.use(errorHandler);
 
 export default app;

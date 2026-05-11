@@ -41,9 +41,56 @@ async function seedDatabase() {
       }
     });
 
+    // Create Demo Workspace
+    const { restaurant: demoRes, adminCode: demoAdminCode } = await createRestaurantWorkspace({
+      ownerName: 'Demo Owner',
+      businessName: 'The Respo Bistro (Demo)',
+      email: 'demo@respo.com',
+      phone: '0000000000',
+      password: 'Demo@123',
+      city: 'Metropolis',
+      district: 'Downtown',
+      state: 'Demo State',
+      address: '123 Demo Street',
+      plan: 'one_time',
+      paymentReference: 'DEMO-SEED-001'
+    });
+
+    // Add some demo data
+    const cat1 = await prisma.category.create({
+      data: {
+        restaurantId: demoRes.id,
+        name: 'Signature Cocktails',
+        description: 'Our finest mixes',
+        sortOrder: 1
+      }
+    });
+
+    await prisma.menuItem.create({
+      data: {
+        restaurantId: demoRes.id,
+        categoryId: cat1.id,
+        name: 'Respo Sunrise',
+        description: 'Tequila, orange juice, and grenadine with a twist.',
+        price: 450,
+        isAvailable: true
+      }
+    });
+
+    await prisma.table.create({
+      data: {
+        restaurantId: demoRes.id,
+        name: 'VIP Terrace',
+        tableNumber: 101,
+        seats: 4,
+        accessToken: `demo-table-101-${Date.now()}`
+      }
+    });
+
     console.log('Database seeded successfully.');
     console.log(`Restaurant: ${restaurant.businessName} (${restaurant.restaurantCode})`);
     console.log(`Admin login: ${adminCode} / Admin@123`);
+    console.log(`Demo login: demo@respo.com / Demo@123`);
     console.log('Staff login: staff@restaurant.com / Staff@123');
     console.log(`Delivery QR URL: ${deliveryUrl}`);
   } catch (error) {

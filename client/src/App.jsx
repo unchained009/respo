@@ -44,10 +44,12 @@ const AppRoutes = () => (
   </Routes>
 );
 
-const App = () => (
-  <AdminProvider>
-    <AppRoutes />
-  </AdminProvider>
-);
+const App = () => {
+  return (
+    <AdminProvider>
+      <AppRoutes />
+    </AdminProvider>
+  );
+};
 
 export default App;

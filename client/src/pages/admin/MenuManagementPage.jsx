@@ -10,9 +10,21 @@ const MenuManagementPage = () => {
   const [editingItem, setEditingItem] = useState(null);
 
   const loadData = async () => {
-    const [categoryList, menuItems] = await Promise.all([api.getCategories(), api.getMenu()]);
-    setCategories(categoryList);
-    setItems(menuItems);
+    try {
+      const [categoryList, menuItems] = await Promise.all([api.getCategories(), api.getMenu()]);
+      setCategories(categoryList);
+      setItems(menuItems);
+    } catch (error) {
+      console.warn('Failed to load menu data, using mock defaults.', error);
+      setCategories([
+        { _id: 'cat1', name: 'Main Course' },
+        { _id: 'cat2', name: 'Beverages' }
+      ]);
+      setItems([
+        { _id: 'item1', name: 'Signature Burger', description: 'Juicy beef patty with secret sauce.', price: 450, category: { name: 'Main Course' }, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500' },
+        { _id: 'item2', name: 'Vanilla Milkshake', description: 'Creamy vanilla goodness.', price: 250, category: { name: 'Beverages' }, image: 'https://images.unsplash.com/photo-1572490122747-3968b75cc699?w=500' }
+      ]);
+    }
   };
 
   useEffect(() => {

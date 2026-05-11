@@ -18,7 +18,7 @@ export const getPlatformStats = asyncHandler(async (req, res) => {
     activeSubscriptionCount,
     totalOrders,
     monthlyPlanPrice: 650,
-    oneTimePlanPrice: 20000
+    oneTimePlanPrice: 50000
   });
 });
 

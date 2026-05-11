@@ -1,69 +1,76 @@
 import StatusBadge from '../common/StatusBadge.jsx';
 
-const OrderTable = ({ orders, onStatusChange, showActions = true }) => (
+const OrderTable = ({ orders = [], onStatusChange, showActions = true }) => (
   <div className="table-wrapper">
     <table className="data-table">
       <thead>
         <tr>
-          <th>Order</th>
-          <th>Source</th>
-          <th>Customer</th>
-          <th>Items</th>
+          <th>Order ID</th>
+          <th>Table / Source</th>
+          <th>Guest Details</th>
+          <th>Menu Items</th>
           <th>Total</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th>Live Status</th>
+          <th>Quick Actions</th>
         </tr>
       </thead>
       <tbody>
-        {orders.map((order) => (
-          <tr key={order._id}>
-            <td>{order._id.slice(-6)}</td>
-            <td>
-              <div className="data-stack">
-                <strong>{order.sourceLabel || (order.tableName ? `Table ${order.tableNumber}` : 'Home Delivery')}</strong>
-                <span>{order.orderType === 'delivery' ? 'Delivery order' : 'Dine-in order'}</span>
-              </div>
-            </td>
-            <td>
-              {order.orderType === 'delivery' ? (
+        {Array.isArray(orders) && orders.length > 0 ? (
+          orders.map((order) => (
+            <tr key={order._id}>
+              <td style={{ fontWeight: 800, color: 'var(--accent)' }}>
+                 #{order._id?.slice(-4).toUpperCase() || 'MOCK'}
+              </td>
+              <td>
                 <div className="data-stack">
-                  <strong>{order.customerName || 'Guest'}</strong>
-                  <span>{order.customerPhone || 'No phone provided'}</span>
-                  <span>{order.deliveryAddress || 'No address provided'}</span>
+                  <span style={{ fontWeight: 700 }}>{order.tableName || 'Delivery'}</span>
+                  <span style={{ fontSize: '0.7rem', opacity: 0.6 }}>{order.createdAt ? new Date(order.createdAt).toLocaleTimeString() : 'Just now'}</span>
                 </div>
-              ) : (
-                <div className="data-stack">
-                  <strong>{order.tableName || 'Table order'}</strong>
-                  <span>{order.tableNumber ? `Table #${order.tableNumber}` : 'Restaurant floor'}</span>
-                </div>
-              )}
-            </td>
-            <td>{order.items.map((item) => `${item.name} x${item.quantity}`).join(', ')}</td>
-            <td>Rs. {order.totalAmount}</td>
-            <td>
-              <StatusBadge status={order.status} />
-            </td>
-            <td>
-              {showActions ? (
-                <div className="action-row">
-                  {['accepted', 'rejected', 'preparing', 'served', 'completed'].map((status) => (
-                    <button
-                      key={status}
-                      type="button"
-                      className="ghost-button"
-                      onClick={() => onStatusChange(order._id, status)}
-                      disabled={order.status === status}
-                    >
-                      {status}
-                    </button>
-                  ))}
-                </div>
-              ) : (
-                '-'
-              )}
+              </td>
+              <td>
+                 <div className="data-stack">
+                    <strong>{order.customerName || 'Walk-in Guest'}</strong>
+                    <span style={{ fontSize: '0.75rem' }}>{order.customerPhone || 'Direct'}</span>
+                 </div>
+              </td>
+              <td style={{ fontSize: '0.85rem', color: 'var(--muted)', maxWidth: '250px' }}>
+                 {(order.items || []).map(i => `${i.name} x${i.quantity}`).join(', ')}
+              </td>
+              <td style={{ fontWeight: 800 }}>
+                 Rs. {order.totalAmount}
+              </td>
+              <td>
+                <StatusBadge status={order.status} />
+              </td>
+              <td>
+                {showActions ? (
+                  <div className="action-row" style={{ flexWrap: 'nowrap' }}>
+                    {['preparing', 'served', 'completed'].map((status) => (
+                      <button
+                        key={status}
+                        type="button"
+                        className="ghost-button"
+                        style={{ fontSize: '0.7rem', padding: '6px 10px' }}
+                        onClick={() => onStatusChange(order._id, status)}
+                        disabled={order.status === status}
+                      >
+                        {status}
+                      </button>
+                    ))}
+                  </div>
+                ) : (
+                  '-'
+                )}
+              </td>
+            </tr>
+          ))
+        ) : (
+          <tr>
+            <td colSpan="7" style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>
+               No orders in the queue.
             </td>
           </tr>
-        ))}
+        )}
       </tbody>
     </table>
   </div>

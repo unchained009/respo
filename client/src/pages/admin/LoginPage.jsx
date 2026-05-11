@@ -1,17 +1,19 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 import { useAdmin } from '../../context/AdminContext.jsx';
 import ThemeToggle from '../../components/common/ThemeToggle.jsx';
 
 const LoginPage = () => {
   const navigate = useNavigate();
-  const { login } = useAdmin();
+  const { login, loginDemo } = useAdmin();
   const [formData, setFormData] = useState({
     identifier: '',
     password: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [demoLoading, setDemoLoading] = useState(false);
 
   const handleChange = (event) => {
     setFormData((current) => ({
@@ -35,9 +37,26 @@ const LoginPage = () => {
     }
   };
 
+  const handleDemo = async () => {
+    setDemoLoading(true);
+    setError('');
+    try {
+      await loginDemo();
+      navigate('/admin');
+    } catch (requestError) {
+      setError('Demo login failed. Please ensure database is seeded.');
+    } finally {
+      setDemoLoading(false);
+    }
+  };
+
   return (
     <div className="auth-page">
-      <div className="auth-card">
+      <motion.div 
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        className="auth-card"
+      >
         <div className="auth-card__actions">
           <ThemeToggle />
         </div>
@@ -62,11 +81,23 @@ const LoginPage = () => {
             required
           />
           {error ? <div className="alert error">{error}</div> : null}
-          <button type="submit" className="primary-button full-width" disabled={loading}>
+          <button type="submit" className="primary-button full-width" disabled={loading || demoLoading}>
             {loading ? 'Signing in...' : 'Login'}
           </button>
         </form>
-      </div>
+
+        <div className="divider" style={{ margin: '20px 0', textAlign: 'center', color: 'var(--muted)', fontSize: '0.85rem' }}>
+          OR
+        </div>
+
+        <button 
+          onClick={handleDemo} 
+          className="secondary-button full-width" 
+          disabled={loading || demoLoading}
+        >
+          {demoLoading ? 'Launching Demo...' : 'Try Demo Experience'}
+        </button>
+      </motion.div>
     </div>
   );
 };

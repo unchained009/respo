@@ -25,7 +25,7 @@ const SubscribePage = () => {
   const planLabel = useMemo(
     () => ({
       monthly: 'Rs. 650/month',
-      one_time: 'Rs. 20,000 one-time'
+      one_time: 'Rs. 50,000 one-time'
     }),
     []
   );
@@ -74,76 +74,102 @@ const SubscribePage = () => {
         </div>
       </header>
 
-      <main className="subscribe-main">
-        <section className="subscribe-card">
-          <div className="section-heading">
+      <main className="subscribe-main" style={{ display: 'grid', gridTemplateColumns: success ? '1fr 1fr' : '1fr', gap: '40px', alignItems: 'start' }}>
+        <section className="subscribe-card" style={{ padding: '60px', borderRadius: '48px', background: 'var(--panel)', border: '1px solid var(--line)', boxShadow: 'var(--shadow-lg)' }}>
+          <div className="section-heading" style={{ marginBottom: '40px' }}>
             <p className="eyebrow">Checkout & Provisioning</p>
-            <h2>Everything needed to create a restaurant-specific admin workspace.</h2>
+            <h2 style={{ fontSize: '2.5rem' }}>Workspace Configuration</h2>
+            <p style={{ color: 'var(--muted)', marginTop: '12px' }}>Fill in the details to generate your secure restaurant environment.</p>
           </div>
 
           <form className="stack-form" onSubmit={handleSubmit}>
-            <div className="two-column-grid">
-              <input name="ownerName" placeholder="Owner name" value={formData.ownerName} onChange={handleChange} required />
-              <input
-                name="businessName"
-                placeholder="Restaurant / business name"
-                value={formData.businessName}
-                onChange={handleChange}
-                required
-              />
-              <input name="email" type="email" placeholder="Email ID" value={formData.email} onChange={handleChange} required />
-              <input name="phone" placeholder="Phone number" value={formData.phone} onChange={handleChange} required />
-              <input
-                name="password"
-                type="password"
-                placeholder="Create password"
-                value={formData.password}
-                onChange={handleChange}
-                required
-              />
-              <select name="plan" value={formData.plan} onChange={handleChange}>
-                <option value="monthly">Monthly Subscription</option>
-                <option value="one_time">One-Time Setup</option>
-              </select>
-              <input name="city" placeholder="City" value={formData.city} onChange={handleChange} required />
-              <input name="district" placeholder="District" value={formData.district} onChange={handleChange} required />
-              <input name="state" placeholder="State" value={formData.state} onChange={handleChange} required />
-              <input name="address" placeholder="Address (optional)" value={formData.address} onChange={handleChange} />
+            <div className="two-column-grid" style={{ gap: '24px' }}>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Owner Name</label>
+                <input name="ownerName" placeholder="Full Name" value={formData.ownerName} onChange={handleChange} required />
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Business Name</label>
+                <input
+                  name="businessName"
+                  placeholder="Restaurant Name"
+                  value={formData.businessName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Email ID</label>
+                <input name="email" type="email" placeholder="owner@restaurant.com" value={formData.email} onChange={handleChange} required />
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Phone Number</label>
+                <input name="phone" placeholder="+91 00000 00000" value={formData.phone} onChange={handleChange} required />
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Admin Password</label>
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Secure Password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Select Plan</label>
+                <select name="plan" value={formData.plan} onChange={handleChange} style={{ height: '54px' }}>
+                  <option value="monthly">Monthly Subscription (Rs. 650)</option>
+                  <option value="one_time">One-Time Setup (Rs. 50,000)</option>
+                </select>
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>City</label>
+                <input name="city" placeholder="City" value={formData.city} onChange={handleChange} required />
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>District</label>
+                <input name="district" placeholder="District" value={formData.district} onChange={handleChange} required />
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>State</label>
+                <input name="state" placeholder="State" value={formData.state} onChange={handleChange} required />
+              </div>
+              <div className="field-group">
+                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Address</label>
+                <input name="address" placeholder="Full Address (optional)" value={formData.address} onChange={handleChange} />
+              </div>
             </div>
 
-            <div className="checkout-banner">
-              <strong>Selected plan: {planLabel[formData.plan]}</strong>
-              <span>This demo flow simulates a successful payment and provisions the tenant instantly.</span>
+            <div className="checkout-banner" style={{ marginTop: '32px', padding: '24px', background: 'var(--accent-soft)', borderRadius: '24px', border: '1px solid var(--line)' }}>
+              <strong style={{ display: 'block', fontSize: '1.1rem' }}>Selected plan: {planLabel[formData.plan]}</strong>
+              <span style={{ fontSize: '0.9rem', color: 'var(--muted)' }}>This demo flow simulates a successful payment and provisions the tenant instantly.</span>
             </div>
 
-            {error ? <div className="alert error">{error}</div> : null}
-            <button type="submit" className="primary-button" disabled={loading}>
+            {error ? <div className="alert error" style={{ marginTop: '20px' }}>{error}</div> : null}
+            <button type="submit" className="primary-button full-width" style={{ marginTop: '32px', height: '60px', fontSize: '1.1rem' }} disabled={loading}>
               {loading ? 'Provisioning Workspace...' : 'Pay & Launch Restaurant'}
             </button>
           </form>
         </section>
 
         {success ? (
-          <section className="success-card">
+          <section className="success-card" style={{ padding: '60px', borderRadius: '48px', background: 'var(--panel)', border: '2px solid var(--success)', boxShadow: 'var(--shadow-lg)' }}>
             <p className="eyebrow">Workspace Ready</p>
-            <h3>{success.restaurant.businessName}</h3>
-            <p>Your tenant has been created and seeded with tables, categories, menu items, and delivery access.</p>
-            <div className="success-grid">
-              <div>
-                <span>Restaurant Code</span>
-                <strong>{success.restaurant.restaurantCode}</strong>
+            <h3 style={{ fontSize: '2.5rem', color: 'var(--success)' }}>{success.restaurant.businessName}</h3>
+            <p style={{ color: 'var(--muted)', margin: '20px 0' }}>Your tenant has been created and seeded with tables, categories, menu items, and delivery access.</p>
+            <div className="success-grid" style={{ display: 'grid', gap: '20px', marginBottom: '32px' }}>
+              <div style={{ padding: '20px', background: 'var(--bg)', borderRadius: '20px', border: '1px solid var(--line)' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Restaurant Code</span>
+                <strong style={{ display: 'block', fontSize: '1.5rem', marginTop: '4px' }}>{success.restaurant.restaurantCode}</strong>
               </div>
-              <div>
-                <span>Admin ID</span>
-                <strong>{success.credentials.adminCode}</strong>
-              </div>
-              <div>
-                <span>Login</span>
-                <strong>Use your chosen password</strong>
+              <div style={{ padding: '20px', background: 'var(--bg)', borderRadius: '20px', border: '1px solid var(--line)' }}>
+                <span style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Admin ID</span>
+                <strong style={{ display: 'block', fontSize: '1.5rem', marginTop: '4px' }}>{success.credentials.adminCode}</strong>
               </div>
             </div>
-            <p className="success-link">Delivery QR URL: {success.deliveryUrl}</p>
-            <Link className="primary-button" to="/admin/login">
+            <Link className="primary-button full-width" to="/admin/login" style={{ height: '60px' }}>
               Go To Admin Login
             </Link>
           </section>

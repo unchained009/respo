@@ -4,14 +4,30 @@ import { api } from '../services/api.js';
 const AdminContext = createContext(null);
 
 export const AdminProvider = ({ children }) => {
-  const [token, setToken] = useState(localStorage.getItem('pos_token'));
+  const [token, setToken] = useState(() => {
+    try {
+      return localStorage.getItem('pos_token');
+    } catch (e) {
+      return null;
+    }
+  });
   const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem('pos_user');
-    return savedUser ? JSON.parse(savedUser) : null;
+    try {
+      const savedUser = localStorage.getItem('pos_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch (e) {
+      console.error('Error parsing pos_user from localStorage', e);
+      return null;
+    }
   });
   const [restaurant, setRestaurant] = useState(() => {
-    const savedRestaurant = localStorage.getItem('pos_restaurant');
-    return savedRestaurant ? JSON.parse(savedRestaurant) : null;
+    try {
+      const savedRestaurant = localStorage.getItem('pos_restaurant');
+      return savedRestaurant ? JSON.parse(savedRestaurant) : null;
+    } catch (e) {
+      console.error('Error parsing pos_restaurant from localStorage', e);
+      return null;
+    }
   });
 
   useEffect(() => {
@@ -45,6 +61,41 @@ export const AdminProvider = ({ children }) => {
     setUser(response.user);
     setRestaurant(response.user.restaurant);
     return response;
+  };
+
+  const loginDemo = async () => {
+    try {
+      const response = await api.demoLogin();
+      setToken(response.token);
+      setUser(response.user);
+      setRestaurant(response.user.restaurant);
+      return response;
+    } catch (error) {
+      console.warn('Database unreachable. Launching Mock Demo Mode.', error);
+      // Fallback to mock data for demo purposes
+      const mockResponse = {
+        token: 'mock-demo-token',
+        user: {
+          id: 'demo-user-id',
+          name: 'Demo Manager',
+          email: 'demo@respo.com',
+          role: 'admin',
+          restaurant: {
+            id: 'demo-res-id',
+            businessName: 'The Respo Bistro (Mock)',
+            restaurantCode: 'RESPO-DEMO',
+            adminCode: 'DEMO-ADMIN',
+            slug: 'respo-bistro',
+            primaryColor: '#ff8c42',
+            secondaryColor: '#0f172a'
+          }
+        }
+      };
+      setToken(mockResponse.token);
+      setUser(mockResponse.user);
+      setRestaurant(mockResponse.user.restaurant);
+      return mockResponse;
+    }
   };
 
   const refreshProfile = async () => {
@@ -81,6 +132,7 @@ export const AdminProvider = ({ children }) => {
       user,
       restaurant,
       login,
+      loginDemo,
       logout,
       refreshProfile,
       refreshRestaurant

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const BASE_URL = (import.meta.env.VITE_API_URL || 'http://localhost:5000/api').replace(/\/$/, '');
 
 const axiosInstance = axios.create({
   baseURL: BASE_URL
@@ -23,7 +23,12 @@ export const api = {
     return data;
   },
   async login(payload) {
+    // Ensure we call /auth/login which resolves to BASE_URL + /auth/login
     const { data } = await axiosInstance.post('/auth/login', payload);
+    return data;
+  },
+  async demoLogin() {
+    const { data } = await axiosInstance.post('/auth/demo');
     return data;
   },
   async getMe() {

@@ -7,6 +7,10 @@ const STATUS_COLORS = {
   rejected: 'status rejected'
 };
 
-const StatusBadge = ({ status }) => <span className={STATUS_COLORS[status] || 'status'}>{status}</span>;
+const StatusBadge = ({ status }) => (
+  <span className={STATUS_COLORS[status] || 'status'} style={{ fontWeight: 700, letterSpacing: '0.02em' }}>
+    {status?.toUpperCase()}
+  </span>
+);
 
 export default StatusBadge;

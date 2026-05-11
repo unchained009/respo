@@ -12,13 +12,29 @@ const TablesPage = () => {
   const [deliveryQr, setDeliveryQr] = useState(null);
 
   const loadTables = async () => {
-    const tableList = await api.getTables();
-    setTables(tableList);
+    try {
+      const tableList = await api.getTables();
+      setTables(tableList);
+    } catch (error) {
+      console.warn('Failed to load tables, using mock defaults.', error);
+      setTables([
+        { _id: 't1', name: 'Window Booth', tableNumber: 1, seats: 4, accessToken: 'mock-t1' },
+        { _id: 't2', name: 'Center Table', tableNumber: 5, seats: 2, accessToken: 'mock-t2' }
+      ]);
+    }
   };
 
   useEffect(() => {
     loadTables();
-    api.getDeliveryQr().then(setDeliveryQr).catch(() => setDeliveryQr(null));
+    api.getDeliveryQr()
+      .then(setDeliveryQr)
+      .catch(() => {
+        setDeliveryQr({
+          qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=mock-delivery',
+          entryLabel: 'Home Delivery Portal',
+          accessUrl: 'http://localhost:5173/r/demo/access/mock-delivery'
+        });
+      });
   }, []);
 
   const handleSubmit = async (payload) => {

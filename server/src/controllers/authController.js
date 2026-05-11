@@ -51,6 +51,27 @@ export const loginAdmin = asyncHandler(async (req, res) => {
   });
 });
 
+export const loginDemo = asyncHandler(async (req, res) => {
+  const user = await prisma.user.findFirst({
+    where: {
+      email: 'demo@respo.com'
+    },
+    select: userSelect
+  });
+
+  if (!user) {
+    res.status(404);
+    throw new Error('Demo account not found. Please run seed command.');
+  }
+
+  res.json({
+    message: 'Demo login successful.',
+    token: generateToken(user.id),
+    user: serializeUser(user),
+    isDemo: true
+  });
+});
+
 export const getMe = asyncHandler(async (req, res) => {
   res.json(serializeUser(req.user));
 });
