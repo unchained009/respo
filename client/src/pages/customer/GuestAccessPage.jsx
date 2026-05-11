@@ -138,7 +138,7 @@ const GuestAccessPage = () => {
         </div>
         <div className="landing-topbar__actions">
           <ThemeToggle />
-          <Link className="ghost-button" to="/">
+          <Link className="btn-ghost" to="/">
             Visit Platform
           </Link>
         </div>
