@@ -1,56 +1,55 @@
 import StatusBadge from '../common/StatusBadge.jsx';
 
 const OrderTable = ({ orders = [], onStatusChange, showActions = true }) => (
-  <div className="table-wrapper">
-    <table className="data-table">
+  <div className="w-full overflow-x-auto">
+    <table className="w-full border-separate border-spacing-y-4">
       <thead>
         <tr>
-          <th>Order ID</th>
-          <th>Table / Source</th>
-          <th>Guest Details</th>
-          <th>Menu Items</th>
-          <th>Total</th>
-          <th>Live Status</th>
-          <th>Quick Actions</th>
+          <th className="px-8 pb-4 text-left text-muted uppercase text-[0.9rem] font-extrabold tracking-wider">Order ID</th>
+          <th className="px-8 pb-4 text-left text-muted uppercase text-[0.9rem] font-extrabold tracking-wider">Table / Source</th>
+          <th className="px-8 pb-4 text-left text-muted uppercase text-[0.9rem] font-extrabold tracking-wider">Guest Details</th>
+          <th className="px-8 pb-4 text-left text-muted uppercase text-[0.9rem] font-extrabold tracking-wider">Menu Items</th>
+          <th className="px-8 pb-4 text-left text-muted uppercase text-[0.9rem] font-extrabold tracking-wider">Total</th>
+          <th className="px-8 pb-4 text-left text-muted uppercase text-[0.9rem] font-extrabold tracking-wider">Live Status</th>
+          <th className="px-8 pb-4 text-left text-muted uppercase text-[0.9rem] font-extrabold tracking-wider">Quick Actions</th>
         </tr>
       </thead>
       <tbody>
         {Array.isArray(orders) && orders.length > 0 ? (
           orders.map((order) => (
-            <tr key={order._id}>
-              <td style={{ fontWeight: 800, color: 'var(--accent)' }}>
+            <tr key={order._id} className="group">
+              <td className="p-8 bg-bg-elevated border-y border-line rounded-l-[24px] font-black text-accent text-lg">
                  #{order._id?.slice(-4).toUpperCase() || 'MOCK'}
               </td>
-              <td>
-                <div className="data-stack">
-                  <span style={{ fontWeight: 700 }}>{order.tableName || 'Delivery'}</span>
-                  <span style={{ fontSize: '0.7rem', opacity: 0.6 }}>{order.createdAt ? new Date(order.createdAt).toLocaleTimeString() : 'Just now'}</span>
+              <td className="p-8 bg-bg-elevated border-y border-line">
+                <div className="flex flex-col gap-1">
+                  <span className="font-bold text-text">{order.tableName || 'Delivery'}</span>
+                  <span className="text-[0.7rem] opacity-60 font-medium">{order.createdAt ? new Date(order.createdAt).toLocaleTimeString() : 'Just now'}</span>
                 </div>
               </td>
-              <td>
-                 <div className="data-stack">
-                    <strong>{order.customerName || 'Walk-in Guest'}</strong>
-                    <span style={{ fontSize: '0.75rem' }}>{order.customerPhone || 'Direct'}</span>
+              <td className="p-8 bg-bg-elevated border-y border-line">
+                 <div className="flex flex-col gap-1">
+                    <strong className="font-bold text-text">{order.customerName || 'Walk-in Guest'}</strong>
+                    <span className="text-[0.75rem] text-muted font-medium">{order.customerPhone || 'Direct'}</span>
                  </div>
               </td>
-              <td style={{ fontSize: '0.85rem', color: 'var(--muted)', maxWidth: '250px' }}>
+              <td className="p-8 bg-bg-elevated border-y border-line text-[0.85rem] text-muted max-w-[250px] font-medium">
                  {(order.items || []).map(i => `${i.name} x${i.quantity}`).join(', ')}
               </td>
-              <td style={{ fontWeight: 800 }}>
+              <td className="p-8 bg-bg-elevated border-y border-line font-black text-text text-lg">
                  Rs. {order.totalAmount}
               </td>
-              <td>
+              <td className="p-8 bg-bg-elevated border-y border-line">
                 <StatusBadge status={order.status} />
               </td>
-              <td>
+              <td className="p-8 bg-bg-elevated border-y border-line rounded-r-[24px]">
                 {showActions ? (
-                  <div className="action-row" style={{ flexWrap: 'nowrap' }}>
+                  <div className="flex gap-2 whitespace-nowrap">
                     {['preparing', 'served', 'completed'].map((status) => (
                       <button
                         key={status}
                         type="button"
-                        className="ghost-button"
-                        style={{ fontSize: '0.7rem', padding: '6px 10px' }}
+                        className="btn-ghost !text-[0.7rem] !px-2.5 !py-1.5"
                         onClick={() => onStatusChange(order._id, status)}
                         disabled={order.status === status}
                       >
@@ -66,7 +65,7 @@ const OrderTable = ({ orders = [], onStatusChange, showActions = true }) => (
           ))
         ) : (
           <tr>
-            <td colSpan="7" style={{ textAlign: 'center', padding: '40px', color: 'var(--muted)' }}>
+            <td colSpan="7" className="text-center p-14 text-muted font-bold text-lg bg-bg-elevated/50 rounded-[24px]">
                No orders in the queue.
             </td>
           </tr>

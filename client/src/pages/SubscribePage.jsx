@@ -57,59 +57,61 @@ const SubscribePage = () => {
   };
 
   return (
-    <div className="subscribe-shell">
-      <header className="landing-topbar">
-        <div className="brand-identity">
-          <span className="brand-pill">ONBOARDING</span>
+    <div className="min-h-screen">
+      <header className="flex items-center justify-between p-6 px-10 sticky top-0 z-[1000] bg-bg/70 backdrop-blur-md">
+        <div className="flex items-center gap-4">
+          <span className="bg-accent/10 text-accent-strong px-3 py-1.5 rounded-full text-[0.7rem] font-extrabold tracking-widest uppercase">ONBOARDING</span>
           <div>
-            <strong>Launch Your Restaurant Workspace</strong>
-            <p>Complete onboarding, pick a plan, and we will provision your restaurant environment instantly.</p>
+            <strong className="text-2xl font-extrabold tracking-tight bg-gradient-to-br from-accent to-accent-strong bg-clip-text text-transparent block">Launch Your Restaurant Workspace</strong>
+            <p className="m-0 text-sm text-muted font-medium">Complete onboarding, pick a plan, and we will provision your restaurant environment instantly.</p>
           </div>
         </div>
-        <div className="landing-topbar__actions">
+        <div className="flex items-center gap-4">
           <ThemeToggle />
-          <Link className="ghost-button" to="/">
+          <Link className="btn-ghost" to="/">
             Back Home
           </Link>
         </div>
       </header>
 
-      <main className="subscribe-main" style={{ display: 'grid', gridTemplateColumns: success ? '1fr 1fr' : '1fr', gap: '40px', alignItems: 'start' }}>
-        <section className="subscribe-card" style={{ padding: '60px', borderRadius: '48px', background: 'var(--panel)', border: '1px solid var(--line)', boxShadow: 'var(--shadow-lg)' }}>
-          <div className="section-heading" style={{ marginBottom: '40px' }}>
-            <p className="eyebrow">Checkout & Provisioning</p>
-            <h2 style={{ fontSize: '2.5rem' }}>Workspace Configuration</h2>
-            <p style={{ color: 'var(--muted)', marginTop: '12px' }}>Fill in the details to generate your secure restaurant environment.</p>
+      <main className={`max-w-[1440px] mx-auto p-12 lg:p-12 grid ${success ? 'lg:grid-cols-2' : 'grid-cols-1'} gap-10 items-start`}>
+        <section className="glass p-14 rounded-[48px] border border-line shadow-premium bg-bg-elevated/70">
+          <div className="mb-10">
+            <p className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] mb-4 block">Checkout & Provisioning</p>
+            <h2 className="text-text font-bold">Workspace Configuration</h2>
+            <p className="text-muted mt-3">Fill in the details to generate your secure restaurant environment.</p>
           </div>
 
-          <form className="stack-form" onSubmit={handleSubmit}>
-            <div className="two-column-grid" style={{ gap: '24px' }}>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Owner Name</label>
-                <input name="ownerName" placeholder="Full Name" value={formData.ownerName} onChange={handleChange} required />
+          <form className="grid gap-8" onSubmit={handleSubmit}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">Owner Name</label>
+                <input name="ownerName" className="input-base" placeholder="Full Name" value={formData.ownerName} onChange={handleChange} required />
               </div>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Business Name</label>
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">Business Name</label>
                 <input
                   name="businessName"
+                  className="input-base"
                   placeholder="Restaurant Name"
                   value={formData.businessName}
                   onChange={handleChange}
                   required
                 />
               </div>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Email ID</label>
-                <input name="email" type="email" placeholder="owner@restaurant.com" value={formData.email} onChange={handleChange} required />
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">Email ID</label>
+                <input name="email" className="input-base" type="email" placeholder="owner@restaurant.com" value={formData.email} onChange={handleChange} required />
               </div>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Phone Number</label>
-                <input name="phone" placeholder="+91 00000 00000" value={formData.phone} onChange={handleChange} required />
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">Phone Number</label>
+                <input name="phone" className="input-base" placeholder="+91 00000 00000" value={formData.phone} onChange={handleChange} required />
               </div>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Admin Password</label>
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">Admin Password</label>
                 <input
                   name="password"
+                  className="input-base"
                   type="password"
                   placeholder="Secure Password"
                   value={formData.password}
@@ -117,65 +119,66 @@ const SubscribePage = () => {
                   required
                 />
               </div>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Select Plan</label>
-                <select name="plan" value={formData.plan} onChange={handleChange} style={{ height: '54px' }}>
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">Select Plan</label>
+                <select name="plan" className="input-base" value={formData.plan} onChange={handleChange}>
                   <option value="monthly">Monthly Subscription (Rs. 650)</option>
                   <option value="one_time">One-Time Setup (Rs. 50,000)</option>
                 </select>
               </div>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>City</label>
-                <input name="city" placeholder="City" value={formData.city} onChange={handleChange} required />
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">City</label>
+                <input name="city" className="input-base" placeholder="City" value={formData.city} onChange={handleChange} required />
               </div>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>District</label>
-                <input name="district" placeholder="District" value={formData.district} onChange={handleChange} required />
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">District</label>
+                <input name="district" className="input-base" placeholder="District" value={formData.district} onChange={handleChange} required />
               </div>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>State</label>
-                <input name="state" placeholder="State" value={formData.state} onChange={handleChange} required />
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">State</label>
+                <input name="state" className="input-base" placeholder="State" value={formData.state} onChange={handleChange} required />
               </div>
-              <div className="field-group">
-                <label style={{ fontSize: '0.75rem', fontWeight: 800, color: 'var(--accent)', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>Address</label>
-                <input name="address" placeholder="Full Address (optional)" value={formData.address} onChange={handleChange} />
+              <div className="grid gap-2.5 text-left">
+                <label className="text-[0.8rem] font-extrabold text-accent uppercase tracking-widest">Address</label>
+                <input name="address" className="input-base" placeholder="Full Address (optional)" value={formData.address} onChange={handleChange} />
               </div>
             </div>
 
-            <div className="checkout-banner" style={{ marginTop: '32px', padding: '24px', background: 'var(--accent-soft)', borderRadius: '24px', border: '1px solid var(--line)' }}>
-              <strong style={{ display: 'block', fontSize: '1.1rem' }}>Selected plan: {planLabel[formData.plan]}</strong>
-              <span style={{ fontSize: '0.9rem', color: 'var(--muted)' }}>This demo flow simulates a successful payment and provisions the tenant instantly.</span>
+            <div className="mt-8 p-6 bg-accent/10 rounded-3xl border border-line">
+              <strong className="block text-lg">Selected plan: {planLabel[formData.plan]}</strong>
+              <span className="text-sm text-muted">This demo flow simulates a successful payment and provisions the tenant instantly.</span>
             </div>
 
-            {error ? <div className="alert error" style={{ marginTop: '20px' }}>{error}</div> : null}
-            <button type="submit" className="primary-button full-width" style={{ marginTop: '32px', height: '60px', fontSize: '1.1rem' }} disabled={loading}>
+            {error ? <div className="p-4 bg-danger/10 text-danger rounded-2xl border border-danger/20 mt-5">{error}</div> : null}
+            <button type="submit" className="btn-primary w-full mt-8 h-[60px] text-lg" disabled={loading}>
               {loading ? 'Provisioning Workspace...' : 'Pay & Launch Restaurant'}
             </button>
           </form>
         </section>
 
         {success ? (
-          <section className="success-card" style={{ padding: '60px', borderRadius: '48px', background: 'var(--panel)', border: '2px solid var(--success)', boxShadow: 'var(--shadow-lg)' }}>
-            <p className="eyebrow">Workspace Ready</p>
-            <h3 style={{ fontSize: '2.5rem', color: 'var(--success)' }}>{success.restaurant.businessName}</h3>
-            <p style={{ color: 'var(--muted)', margin: '20px 0' }}>Your tenant has been created and seeded with tables, categories, menu items, and delivery access.</p>
-            <div className="success-grid" style={{ display: 'grid', gap: '20px', marginBottom: '32px' }}>
-              <div style={{ padding: '20px', background: 'var(--bg)', borderRadius: '20px', border: '1px solid var(--line)' }}>
-                <span style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Restaurant Code</span>
-                <strong style={{ display: 'block', fontSize: '1.5rem', marginTop: '4px' }}>{success.restaurant.restaurantCode}</strong>
+          <section className="glass p-14 rounded-[48px] border-2 border-success shadow-premium">
+            <p className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] mb-4 block">Workspace Ready</p>
+            <h3 className="text-text font-bold text-success">{success.restaurant.businessName}</h3>
+            <p className="text-muted my-5">Your tenant has been created and seeded with tables, categories, menu items, and delivery access.</p>
+            <div className="grid gap-5 mb-8">
+              <div className="p-5 bg-bg rounded-[20px] border border-line">
+                <span className="text-[0.8rem] text-muted uppercase font-extrabold">Restaurant Code</span>
+                <strong className="block text-2xl mt-1">{success.restaurant.restaurantCode}</strong>
               </div>
-              <div style={{ padding: '20px', background: 'var(--bg)', borderRadius: '20px', border: '1px solid var(--line)' }}>
-                <span style={{ fontSize: '0.8rem', color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 800 }}>Admin ID</span>
-                <strong style={{ display: 'block', fontSize: '1.5rem', marginTop: '4px' }}>{success.credentials.adminCode}</strong>
+              <div className="p-5 bg-bg rounded-[20px] border border-line">
+                <span className="text-[0.8rem] text-muted uppercase font-extrabold">Admin ID</span>
+                <strong className="block text-2xl mt-1">{success.credentials.adminCode}</strong>
               </div>
             </div>
-            <Link className="primary-button full-width" to="/admin/login" style={{ height: '60px' }}>
+            <Link className="btn-primary w-full h-[60px]" to="/admin/login">
               Go To Admin Login
             </Link>
           </section>
         ) : null}
       </main>
     </div>
+
   );
 };
 

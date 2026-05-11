@@ -53,43 +53,46 @@ const MenuManagementPage = () => {
   };
 
   return (
-    <div className="page-stack">
-      <header className="page-header">
+    <div className="grid gap-8">
+      <header className="mb-8">
         <div>
-          <p className="eyebrow">Menu studio</p>
-          <h2>Menu & Category Management</h2>
+          <p className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] mb-4 block">Menu studio</p>
+          <h2 className="text-4xl font-bold">Menu & Category Management</h2>
         </div>
       </header>
 
-      <div className="two-column-grid">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
         <SectionCard title="Create Category" subtitle="Organize items for the customer menu.">
-          <form className="stack-form" onSubmit={handleCategorySubmit}>
+          <form className="grid gap-4" onSubmit={handleCategorySubmit}>
             <input
+              className="input-base"
               placeholder="Category name"
               value={categoryForm.name}
               onChange={(event) => setCategoryForm((current) => ({ ...current, name: event.target.value }))}
               required
             />
             <textarea
+              className="input-base h-auto py-4"
               placeholder="Description"
               rows="3"
               value={categoryForm.description}
               onChange={(event) => setCategoryForm((current) => ({ ...current, description: event.target.value }))}
             />
             <input
+              className="input-base"
               type="number"
               placeholder="Sort order"
               value={categoryForm.sortOrder}
               onChange={(event) => setCategoryForm((current) => ({ ...current, sortOrder: event.target.value }))}
             />
-            <button type="submit" className="primary-button">
+            <button type="submit" className="btn-primary">
               Add Category
             </button>
           </form>
 
-          <div className="chip-list">
+          <div className="flex flex-wrap gap-2 mt-6">
             {categories.map((category) => (
-              <span key={category._id} className="chip">
+              <span key={category._id} className="px-4 py-2 bg-accent/10 text-accent rounded-full text-sm font-bold">
                 {category.name}
               </span>
             ))}
@@ -107,24 +110,24 @@ const MenuManagementPage = () => {
       </div>
 
       <SectionCard title="Current Menu" subtitle="Tap edit to refine any item.">
-        <div className="menu-admin-grid">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {items.map((item) => (
-            <article key={item._id} className="menu-admin-card">
-              <img src={item.image} alt={item.name} />
+            <article key={item._id} className="glass p-6 rounded-3xl flex flex-col gap-4">
+              <img src={item.image} alt={item.name} className="w-full h-40 object-cover rounded-2xl" />
               <div>
-                <h4>{item.name}</h4>
-                <p>{item.description}</p>
-                <span>
+                <h4 className="font-bold text-lg m-0">{item.name}</h4>
+                <p className="text-sm text-muted m-0 line-clamp-2">{item.description}</p>
+                <span className="text-xs text-accent uppercase font-bold tracking-widest">
                   {item.category?.name} • Rs. {item.price}
                 </span>
               </div>
-              <div className="action-row">
-                <button type="button" className="ghost-button" onClick={() => setEditingItem(item)}>
+              <div className="flex gap-2 mt-auto">
+                <button type="button" className="btn-ghost flex-1" onClick={() => setEditingItem(item)}>
                   Edit
                 </button>
                 <button
                   type="button"
-                  className="ghost-button danger"
+                  className="btn-ghost text-danger hover:bg-danger/10 hover:text-danger flex-1"
                   onClick={async () => {
                     await api.deleteMenuItem(item._id);
                     await loadData();
@@ -138,6 +141,7 @@ const MenuManagementPage = () => {
         </div>
       </SectionCard>
     </div>
+
   );
 };
 

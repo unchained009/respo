@@ -7,7 +7,16 @@ export const ThemeProvider = ({ children }) => {
   const [theme, setTheme] = useState(() => localStorage.getItem(STORAGE_KEY) || 'light');
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
+    const root = document.documentElement;
+    console.log('Toggling theme to:', theme);
+    if (theme === 'dark') {
+      root.classList.add('dark');
+      console.log('Class "dark" added to root');
+    } else {
+      root.classList.remove('dark');
+      console.log('Class "dark" removed from root');
+    }
+    root.setAttribute('data-theme', theme);
     localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 

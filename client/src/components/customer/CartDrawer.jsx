@@ -1,101 +1,73 @@
-const CartDrawer = ({
-  cartItems,
-  onAdd,
-  onRemove,
-  onPlaceOrder,
-  loading,
-  mode,
-  notes,
-  onNotesChange,
-  deliveryDetails,
-  onDeliveryFieldChange,
-  entryLabel
-}) => {
-  const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+import { motion, AnimatePresence } from 'framer-motion';
 
-  return (
-    <aside className="cart-drawer">
-      <div className="cart-drawer__header">
-        <div>
-          <h2>Your Order</h2>
-          <p>{mode === 'delivery' ? 'Delivery basket ready to dispatch' : `${entryLabel} ordering is live`}</p>
-        </div>
-        <strong>Rs. {total}</strong>
-      </div>
+const CartDrawer = ({ cart = [], onRemove, onClear, onSubmit, total = 0, isOpen, onClose }) => (
+  <AnimatePresence>
+    {isOpen && (
+      <>
+        <motion.div 
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+          className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-[2000]"
+        />
+        <motion.aside 
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '100%' }}
+          transition={{ type: 'spring', damping: 25, stiffness: 200 }}
+          className="fixed right-0 top-0 h-screen w-full max-w-[480px] bg-bg shadow-2xl z-[2001] flex flex-col"
+        >
+          <div className="p-8 border-b border-black/5 flex items-center justify-between bg-bg-elevated/50 backdrop-blur-md">
+            <div>
+                <h2 className="text-3xl font-black tracking-tight">Your Order</h2>
+                <p className="text-sm text-muted font-bold uppercase tracking-widest mt-1">{cart.length} Items Selected</p>
+            </div>
+            <button onClick={onClose} className="btn-ghost !p-3">
+               <span className="text-2xl">✕</span>
+            </button>
+          </div>
 
-      <div className="cart-drawer__items">
-        {cartItems.length === 0 ? (
-          <p className="empty-state">Your cart is empty. Add something tasty.</p>
-        ) : (
-          cartItems.map((item) => (
-            <div key={item._id} className="cart-item">
-              <div>
-                <h4>{item.name}</h4>
-                <p>Rs. {item.price}</p>
+          <div className="flex-1 overflow-y-auto p-8 flex flex-col gap-6">
+            {cart.length > 0 ? (
+              cart.map((item, idx) => (
+                <div key={`${item._id}-${idx}`} className="flex items-center gap-4 bg-bg-elevated p-4 rounded-2xl border border-line shadow-sm">
+                  <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100">
+                    <img src={item.image} alt={item.name} className="w-full h-full object-cover" />
+                  </div>
+                  <div className="flex-1">
+                    <h4 className="font-bold text-text">{item.name}</h4>
+                    <p className="text-sm text-muted">Rs. {item.price} x {item.quantity}</p>
+                  </div>
+                  <button onClick={() => onRemove(idx)} className="text-danger p-2 hover:bg-danger/10 rounded-lg transition-colors">
+                     🗑️
+                  </button>
+                </div>
+              ))
+            ) : (
+              <div className="flex-1 flex flex-col items-center justify-center text-center gap-4 opacity-40">
+                <span className="text-6xl">🛒</span>
+                <p className="text-xl font-bold">Your cart is empty.</p>
               </div>
-              <div className="quantity-control">
-                <button type="button" onClick={() => onRemove(item)}>
-                  -
-                </button>
-                <span>{item.quantity}</span>
-                <button type="button" onClick={() => onAdd(item)}>
-                  +
-                </button>
+            )}
+          </div>
+
+          {cart.length > 0 && (
+            <div className="p-8 bg-bg-elevated border-t border-line flex flex-col gap-6">
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-bold text-muted uppercase tracking-widest">Total Amount</span>
+                <span className="text-4xl font-black text-accent">Rs. {total}</span>
+              </div>
+              <div className="flex gap-4">
+                <button onClick={onClear} className="btn-secondary flex-1 py-5">Clear</button>
+                <button onClick={onSubmit} className="btn-primary flex-[2] py-5 text-lg">Send to Kitchen</button>
               </div>
             </div>
-          ))
-        )}
-      </div>
-
-      <div className="cart-drawer__meta">
-        <label className="field-stack">
-          <span>Notes for the kitchen</span>
-          <textarea
-            rows="3"
-            placeholder="Add spice level, allergies, cutlery requests, or anything important."
-            value={notes}
-            onChange={(event) => onNotesChange(event.target.value)}
-          />
-        </label>
-
-        {mode === 'delivery' ? (
-          <div className="delivery-form">
-            <label className="field-stack">
-              <span>Your name</span>
-              <input
-                type="text"
-                value={deliveryDetails.customerName}
-                onChange={(event) => onDeliveryFieldChange('customerName', event.target.value)}
-                placeholder="Enter full name"
-              />
-            </label>
-            <label className="field-stack">
-              <span>Phone number</span>
-              <input
-                type="tel"
-                value={deliveryDetails.customerPhone}
-                onChange={(event) => onDeliveryFieldChange('customerPhone', event.target.value)}
-                placeholder="Enter contact number"
-              />
-            </label>
-            <label className="field-stack">
-              <span>Delivery address</span>
-              <textarea
-                rows="4"
-                value={deliveryDetails.deliveryAddress}
-                onChange={(event) => onDeliveryFieldChange('deliveryAddress', event.target.value)}
-                placeholder="House / flat, street, landmark, and city"
-              />
-            </label>
-          </div>
-        ) : null}
-      </div>
-
-      <button type="button" className="primary-button full-width" onClick={onPlaceOrder} disabled={!cartItems.length || loading}>
-        {loading ? 'Placing order...' : mode === 'delivery' ? 'Place Delivery Order' : 'Send To Kitchen'}
-      </button>
-    </aside>
-  );
-};
+          )}
+        </motion.aside>
+      </>
+    )}
+  </AnimatePresence>
+);
 
 export default CartDrawer;

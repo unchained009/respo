@@ -54,66 +54,66 @@ const TablesPage = () => {
   };
 
   return (
-    <div className="page-stack">
-      <header className="page-header">
+    <div className="grid gap-8">
+      <header className="mb-8">
         <div>
-          <p className="eyebrow">{restaurant?.restaurantCode || 'Floor setup'}</p>
-          <h2>Table Management</h2>
+          <p className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] mb-4 block">{restaurant?.restaurantCode || 'Floor setup'}</p>
+          <h2 className="text-4xl font-bold">Table Management</h2>
         </div>
       </header>
 
-      <div className="two-column-grid">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <SectionCard title={editingTable ? 'Edit Table' : 'Add Table'} subtitle="Each table gets a unique QR-ready URL.">
           <TableForm editingTable={editingTable} onSubmit={handleSubmit} onCancel={() => setEditingTable(null)} />
         </SectionCard>
 
         <SectionCard title="QR Preview" subtitle="Generate and print secure QR codes for tables or delivery.">
           {selectedQr ? (
-            <div className="qr-preview">
-              <img src={selectedQr.qrCodeUrl} alt={selectedQr.tableName} />
-              <h4>
+            <div className="flex flex-col items-center gap-4 text-center p-8 bg-accent/5 rounded-[40px] border border-black/5">
+              <img src={selectedQr.qrCodeUrl} alt={selectedQr.tableName} className="w-64 h-64 rounded-3xl shadow-lg border-8 border-white" />
+              <h4 className="font-bold text-xl m-0">
                 {selectedQr.tableName} / #{selectedQr.tableNumber}
               </h4>
-              <p>{selectedQr.tableUrl}</p>
+              <p className="text-[10px] text-muted break-all">{selectedQr.tableUrl}</p>
             </div>
           ) : (
-            <p className="empty-state">Choose a table below to preview its QR code.</p>
+            <p className="text-muted text-center py-12 italic">Choose a table below to preview its QR code.</p>
           )}
         </SectionCard>
       </div>
 
       <SectionCard title="Home Delivery QR" subtitle="Use this QR outside the restaurant for direct delivery ordering.">
         {deliveryQr ? (
-          <div className="qr-preview qr-preview--delivery">
-            <img src={deliveryQr.qrCodeUrl} alt="Home Delivery QR" />
-            <h4>{deliveryQr.entryLabel}</h4>
-            <p>{deliveryQr.accessUrl}</p>
+          <div className="flex flex-col items-center gap-4 text-center p-8 bg-accent/5 rounded-[40px] border border-black/5">
+            <img src={deliveryQr.qrCodeUrl} alt="Home Delivery QR" className="w-64 h-64 rounded-3xl shadow-lg border-8 border-white" />
+            <h4 className="font-bold text-xl m-0">{deliveryQr.entryLabel}</h4>
+            <p className="text-[10px] text-muted break-all">{deliveryQr.accessUrl}</p>
           </div>
         ) : (
-          <p className="empty-state">Delivery QR is not available yet.</p>
+          <p className="text-muted text-center py-12 italic">Delivery QR is not available yet.</p>
         )}
       </SectionCard>
 
       <SectionCard title="Tables" subtitle="Edit seating, activation, and secure guest entry links.">
-        <div className="table-card-grid">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {tables.map((table) => (
-            <article key={table._id} className="table-card">
+            <article key={table._id} className="glass p-6 rounded-3xl flex flex-col justify-between gap-6">
               <div>
-                <h4>{table.name}</h4>
-                <p>Table #{table.tableNumber}</p>
-                <span>{table.seats} seats</span>
-                <small className="token-copy">Token: {table.accessToken?.slice(0, 10)}...</small>
+                <h4 className="font-bold text-lg m-0">{table.name}</h4>
+                <p className="text-muted m-0 text-sm">Table #{table.tableNumber}</p>
+                <span className="text-accent font-bold text-sm">{table.seats} seats</span>
+                <small className="block text-[0.6rem] text-muted font-mono mt-2">Token: {table.accessToken?.slice(0, 10)}...</small>
               </div>
-              <div className="action-row">
-                <button type="button" className="ghost-button" onClick={() => setEditingTable(table)}>
+              <div className="flex flex-wrap gap-2">
+                <button type="button" className="btn-ghost flex-1 text-xs px-2" onClick={() => setEditingTable(table)}>
                   Edit
                 </button>
-                <button type="button" className="ghost-button" onClick={() => openQr(table._id)}>
+                <button type="button" className="btn-ghost flex-1 text-xs px-2" onClick={() => openQr(table._id)}>
                   QR Code
                 </button>
                 <button
                   type="button"
-                  className="ghost-button danger"
+                  className="btn-ghost text-danger hover:bg-danger/10 hover:text-danger flex-1 text-xs px-2"
                   onClick={async () => {
                     await api.deleteTable(table._id);
                     await loadTables();
@@ -127,6 +127,7 @@ const TablesPage = () => {
         </div>
       </SectionCard>
     </div>
+
   );
 };
 

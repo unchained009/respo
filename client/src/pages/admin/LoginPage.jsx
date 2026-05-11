@@ -51,22 +51,23 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="auth-page">
+    <div className="grid place-items-center p-6 min-h-screen">
       <motion.div 
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="auth-card"
+        className="glass w-full max-w-[520px] p-14 rounded-[48px] text-center grid gap-6 relative"
       >
-        <div className="auth-card__actions">
+        <div className="absolute top-10 right-10">
           <ThemeToggle />
         </div>
-        <p className="eyebrow">Client Login</p>
-        <h1>Admin Login</h1>
-        <p>Sign in with your admin ID or email plus the password created during onboarding.</p>
+        <p className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] mb-4 block">Client Login</p>
+        <h1 className="text-5xl font-bold mb-2 text-text">Admin Login</h1>
+        <p className="text-muted font-medium">Sign in with your admin ID or email plus the password created during onboarding.</p>
 
-        <form onSubmit={handleSubmit} className="stack-form">
+        <form onSubmit={handleSubmit} className="grid gap-4">
           <input
             name="identifier"
+            className="input-base"
             value={formData.identifier}
             onChange={handleChange}
             placeholder="Admin ID or email"
@@ -74,31 +75,31 @@ const LoginPage = () => {
           />
           <input
             name="password"
+            className="input-base"
             type="password"
             value={formData.password}
             onChange={handleChange}
             placeholder="Password"
             required
           />
-          {error ? <div className="alert error">{error}</div> : null}
-          <button type="submit" className="primary-button full-width" disabled={loading || demoLoading}>
+          {error ? <div className="p-4 bg-danger/10 text-danger rounded-2xl border border-danger/20">{error}</div> : null}
+          <button type="submit" className="btn-primary w-full" disabled={loading || demoLoading}>
             {loading ? 'Signing in...' : 'Login'}
           </button>
         </form>
 
-        <div className="divider" style={{ margin: '20px 0', textAlign: 'center', color: 'var(--muted)', fontSize: '0.85rem' }}>
-          OR
-        </div>
+        <div className="relative flex justify-center text-xs uppercase"><span className="bg-bg-elevated px-4 text-muted font-black tracking-widest">OR</span></div>
 
         <button 
           onClick={handleDemo} 
-          className="secondary-button full-width" 
+          className="btn-secondary w-full" 
           disabled={loading || demoLoading}
         >
           {demoLoading ? 'Launching Demo...' : 'Try Demo Experience'}
         </button>
       </motion.div>
     </div>
+
   );
 };
 

@@ -7,61 +7,61 @@ const AdminLayout = () => {
   const { user, logout, restaurant } = useAdmin();
 
   return (
-    <div className="admin-shell">
+    <div className="grid grid-cols-1 lg:grid-cols-[340px_1fr]">
       <motion.aside 
         initial={{ x: -20, opacity: 0 }}
         animate={{ x: 0, opacity: 1 }}
-        className="admin-sidebar"
+        className="bg-bg-elevated border-r border-line p-12 px-8 flex flex-col justify-between h-screen sticky top-0"
       >
-        <div className="sidebar-top">
-          <div className="brand-identity" style={{ marginBottom: '32px' }}>
-            <span className="brand-pill">RESPO CLOUD</span>
-            <div style={{ marginTop: '12px' }}>
-              <strong style={{ fontSize: '1.5rem' }}>respo</strong>
+        <div>
+          <div className="flex items-center gap-4 mb-8">
+            <span className="bg-accent/10 text-accent-strong px-3 py-1.5 rounded-full text-[0.7rem] font-extrabold tracking-widest uppercase">RESPO CLOUD</span>
+            <div className="mt-3">
+              <strong className="text-2xl font-extrabold tracking-tight bg-gradient-to-br from-accent to-accent-strong bg-clip-text text-transparent block">respo</strong>
             </div>
           </div>
           
-          <nav className="admin-nav">
-            <NavLink to="/admin" end className={({ isActive }) => isActive ? 'active' : ''}>
-              <span>📊</span> Dashboard
+          <nav className="grid gap-4 mt-14">
+            <NavLink to="/admin" end className={({ isActive }) => `flex items-center gap-4 p-4 px-7 rounded-[22px] text-text font-bold no-underline transition-all duration-400 text-[1.05rem] ${isActive ? 'bg-accent text-white shadow-[0_16px_32px_rgba(249,115,22,0.35)]' : 'text-muted hover:bg-accent/10 hover:text-accent hover:translate-x-2'}`}>
+              <span className="text-2xl transition-transform duration-300">📊</span> Dashboard
             </NavLink>
-            <NavLink to="/admin/orders" className={({ isActive }) => isActive ? 'active' : ''}>
-              <span>🔔</span> Live Orders
+            <NavLink to="/admin/orders" className={({ isActive }) => `flex items-center gap-4 p-4 px-7 rounded-[22px] text-text font-bold no-underline transition-all duration-400 text-[1.05rem] ${isActive ? 'bg-accent text-white shadow-[0_16px_32px_rgba(249,115,22,0.35)]' : 'text-muted hover:bg-accent/10 hover:text-accent hover:translate-x-2'}`}>
+              <span className="text-2xl transition-transform duration-300">🔔</span> Live Orders
             </NavLink>
-            <NavLink to="/admin/menu" className={({ isActive }) => isActive ? 'active' : ''}>
-              <span>🍱</span> Menu Studio
+            <NavLink to="/admin/menu" className={({ isActive }) => `flex items-center gap-4 p-4 px-7 rounded-[22px] text-text font-bold no-underline transition-all duration-400 text-[1.05rem] ${isActive ? 'bg-accent text-white shadow-[0_16px_32px_rgba(249,115,22,0.35)]' : 'text-muted hover:bg-accent/10 hover:text-accent hover:translate-x-2'}`}>
+              <span className="text-2xl transition-transform duration-300">🍱</span> Menu Studio
             </NavLink>
-            <NavLink to="/admin/tables" className={({ isActive }) => isActive ? 'active' : ''}>
-              <span>🪑</span> Floor Setup
+            <NavLink to="/admin/tables" className={({ isActive }) => `flex items-center gap-4 p-4 px-7 rounded-[22px] text-text font-bold no-underline transition-all duration-400 text-[1.05rem] ${isActive ? 'bg-accent text-white shadow-[0_16px_32px_rgba(249,115,22,0.35)]' : 'text-muted hover:bg-accent/10 hover:text-accent hover:translate-x-2'}`}>
+              <span className="text-2xl transition-transform duration-300">🪑</span> Floor Setup
             </NavLink>
-            <NavLink to="/admin/settings" className={({ isActive }) => isActive ? 'active' : ''}>
-              <span>⚙️</span> Settings
+            <NavLink to="/admin/settings" className={({ isActive }) => `flex items-center gap-4 p-4 px-7 rounded-[22px] text-text font-bold no-underline transition-all duration-400 text-[1.05rem] ${isActive ? 'bg-accent text-white shadow-[0_16px_32px_rgba(249,115,22,0.35)]' : 'text-muted hover:bg-accent/10 hover:text-accent hover:translate-x-2'}`}>
+              <span className="text-2xl transition-transform duration-300">⚙️</span> Settings
             </NavLink>
           </nav>
         </div>
 
-        <div className="sidebar-bottom">
-          <div className="admin-user-card" style={{ background: 'var(--accent-soft)', border: 'none' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '16px' }}>
-              <div style={{ width: '44px', height: '44px', borderRadius: '12px', background: 'var(--accent)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontWeight: 800, fontSize: '1.1rem' }}>
+        <div className="mt-auto">
+          <div className="glass bg-accent/10 border-none p-6 rounded-3xl">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-11 h-11 rounded-xl bg-accent flex items-center justify-center text-white font-extrabold text-lg">
                  {user?.name?.[0]?.toUpperCase()}
               </div>
               <div>
-                <p style={{ margin: 0, fontWeight: 700, fontSize: '0.95rem', color: 'var(--text)' }}>{user?.name}</p>
-                <p style={{ margin: 0, fontSize: '0.7rem', color: 'var(--accent)', fontWeight: 800 }}>{user?.role?.toUpperCase()}</p>
+                <p className="m-0 font-bold text-[0.95rem] text-text dark:text-text">{user?.name}</p>
+                <p className="m-0 text-[0.7rem] text-accent font-extrabold uppercase tracking-widest">{user?.role}</p>
               </div>
             </div>
             
-            <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+            <div className="flex gap-2 mb-4">
               <ThemeToggle />
             </div>
 
-            <button type="button" className="ghost-button full-width" onClick={logout} style={{ color: 'var(--danger)', justifyContent: 'center', display: 'flex', background: 'rgba(239, 68, 68, 0.1)', borderRadius: '10px' }}>
+            <button type="button" className="btn-ghost w-full text-danger bg-danger/10 hover:bg-danger/20 hover:text-danger rounded-xl justify-center flex" onClick={logout}>
               Sign Out
             </button>
           </div>
           
-          <p style={{ textAlign: 'center', fontSize: '0.65rem', color: 'var(--muted)', marginTop: '16px', letterSpacing: '0.05em' }}>
+          <p className="text-center text-[0.65rem] text-muted mt-4 tracking-widest uppercase font-bold">
             RESPO POS v1.0.0
           </p>
         </div>
@@ -71,11 +71,12 @@ const AdminLayout = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1 }}
-        className="admin-main"
+        className="max-w-[1440px] mx-auto p-12 lg:p-12 w-full"
       >
         <Outlet />
       </motion.main>
     </div>
+
   );
 };
 

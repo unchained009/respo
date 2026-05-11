@@ -46,11 +46,11 @@ const OrdersPage = () => {
   };
 
   return (
-    <div className="page-stack">
-      <header className="page-header">
+    <div className="grid gap-8">
+      <header className="mb-8">
         <div>
-          <p className="eyebrow">Live orders</p>
-          <h2>Incoming Order Queue</h2>
+          <p className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] mb-4 block">Live orders</p>
+          <h2 className="text-4xl font-bold">Incoming Order Queue</h2>
         </div>
       </header>
 
@@ -58,6 +58,7 @@ const OrdersPage = () => {
         <OrderTable orders={orders} onStatusChange={handleStatusChange} />
       </SectionCard>
     </div>
+
   );
 };
 

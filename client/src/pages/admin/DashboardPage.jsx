@@ -84,15 +84,15 @@ const DashboardPage = () => {
   };
 
   return (
-    <div className="page-stack">
-      <header className="page-header">
+    <div className="grid gap-8">
+      <header className="mb-8">
         <div>
-          <p className="eyebrow">Real-time stats</p>
-          <h2 style={{ fontSize: '2.5rem' }}>Operations Dashboard</h2>
+          <p className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] mb-4 block">Real-time stats</p>
+          <h2 className="text-4xl font-bold">Operations Dashboard</h2>
         </div>
       </header>
 
-      <div className="metric-grid">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-14">
         <MetricCard 
           label="Revenue Today" 
           value={`Rs. ${analytics.salesToday}`} 
@@ -116,43 +116,43 @@ const DashboardPage = () => {
         />
       </div>
 
-      <div className="page-stack">
+      <div className="grid gap-8">
         <SectionCard title="Live Order Monitor" subtitle="Kitchen flow and status updates.">
           <OrderTable orders={orders} onStatusChange={handleStatusChange} />
         </SectionCard>
 
-        <div className="two-column-grid" style={{ gridTemplateColumns: '1fr 1fr', gap: '32px' }}>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           <SectionCard title="Performance" subtitle="Top selling items ranking.">
-            <div className="top-item-list" style={{ gridTemplateColumns: '1fr', display: 'grid', gap: '16px' }}>
+            <div className="grid gap-4">
                {(analytics.topSellingItems || []).slice(0, 3).map((item, idx) => (
-                 <article key={item._id} className="top-item-card" style={{ background: idx === 0 ? 'var(--accent-soft)' : 'transparent', border: '1px solid var(--line)' }}>
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                 <article key={item._id} className={`p-4 rounded-2xl border border-line ${idx === 0 ? 'bg-accent/10' : 'bg-transparent'}`}>
+                    <div className="flex justify-between items-center">
                       <div>
-                        <h4 style={{ margin: 0 }}>{item._id}</h4>
-                        <p style={{ margin: 0, fontSize: '0.85rem', color: 'var(--muted)' }}>{item.quantitySold} units sold</p>
+                        <h4 className="m-0 font-bold">{item._id}</h4>
+                        <p className="m-0 text-sm text-muted">{item.quantitySold} units sold</p>
                       </div>
-                      <span style={{ fontSize: '1.5rem' }}>{idx === 0 ? '🔥' : idx === 1 ? '⭐' : '📈'}</span>
+                      <span className="text-2xl">{idx === 0 ? '🔥' : idx === 1 ? '⭐' : '📈'}</span>
                     </div>
                  </article>
                ))}
                {(!analytics.topSellingItems || analytics.topSellingItems.length === 0) && (
-                   <p style={{ color: 'var(--muted)', textAlign: 'center' }}>No sales data available yet.</p>
+                   <p className="text-muted text-center">No sales data available yet.</p>
                )}
             </div>
           </SectionCard>
 
           <SectionCard title="Workspace Node" subtitle="Identity and status.">
-            <div className="admin-user-card" style={{ background: 'var(--accent-soft)', border: 'none', padding: '24px' }}>
-              <div className="info-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <span className="eyebrow" style={{ margin: 0 }}>Branch Code</span>
-                <strong style={{ letterSpacing: '0.05em' }}>{restaurant?.restaurantCode}</strong>
+            <div className="glass bg-accent/10 border-none p-6 rounded-3xl mt-auto">
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] block">Branch Code</span>
+                <strong className="text-text tracking-widest">{restaurant?.restaurantCode}</strong>
               </div>
-              <div className="info-row" style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '16px' }}>
-                <span className="eyebrow" style={{ margin: 0 }}>Terminal ID</span>
-                <strong style={{ letterSpacing: '0.05em' }}>{restaurant?.adminCode}</strong>
+              <div className="flex justify-between items-center mb-4">
+                <span className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] block">Terminal ID</span>
+                <strong className="text-text tracking-widest">{restaurant?.adminCode}</strong>
               </div>
-              <div className="info-row" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <span className="eyebrow" style={{ margin: 0 }}>Network Status</span>
+              <div className="flex justify-between items-center">
+                <span className="text-[0.75rem] font-extrabold text-accent uppercase tracking-[0.2em] block">Network Status</span>
                 <StatusBadge status="completed" />
               </div>
             </div>
@@ -160,6 +160,7 @@ const DashboardPage = () => {
         </div>
       </div>
     </div>
+
   );
 };
 
