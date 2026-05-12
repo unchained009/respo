@@ -29,28 +29,43 @@ const TablesPage = () => {
     api.getDeliveryQr()
       .then(setDeliveryQr)
       .catch(() => {
+        const demoUrl = `${window.location.origin}/r/demo/access/mock-delivery`;
         setDeliveryQr({
-          qrCodeUrl: 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=mock-delivery',
-          entryLabel: 'Home Delivery Portal',
-          accessUrl: 'http://localhost:5173/r/demo/access/mock-delivery'
+          qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(demoUrl)}`,
+          entryLabel: 'Home Delivery Portal (Demo)',
+          accessUrl: demoUrl
         });
       });
   }, []);
 
   const handleSubmit = async (payload) => {
-    if (editingTable) {
-      await api.updateTable(editingTable._id, payload);
-      setEditingTable(null);
-    } else {
-      await api.createTable(payload);
+    try {
+      if (editingTable) {
+        await api.updateTable(editingTable.id || editingTable._id, payload);
+        setEditingTable(null);
+      } else {
+        await api.createTable(payload);
+      }
+      await loadTables();
+    } catch (error) {
+      console.error('Failed to save table:', error);
     }
-
-    await loadTables();
   };
 
-  const openQr = async (tableId) => {
-    const qr = await api.getTableQr(tableId);
-    setSelectedQr(qr);
+  const openQr = async (table) => {
+    try {
+      const qr = await api.getTableQr(table.id || table._id);
+      setSelectedQr(qr);
+    } catch (error) {
+      console.warn('Failed to fetch real QR, using fallback preview.');
+      const demoUrl = `${window.location.origin}/r/demo/access/${table.accessToken || 'mock-token'}`;
+      setSelectedQr({
+        qrCodeUrl: `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(demoUrl)}`,
+        tableName: table.name,
+        tableNumber: table.tableNumber,
+        tableUrl: demoUrl
+      });
+    }
   };
 
   return (
@@ -97,7 +112,7 @@ const TablesPage = () => {
       <SectionCard title="Tables" subtitle="Edit seating, activation, and secure guest entry links.">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {tables.map((table) => (
-            <article key={table._id} className="glass p-6 rounded-3xl flex flex-col justify-between gap-6">
+            <article key={table.id || table._id} className="glass p-6 rounded-3xl flex flex-col justify-between gap-6">
               <div>
                 <h4 className="font-bold text-lg m-0">{table.name}</h4>
                 <p className="text-muted m-0 text-sm">Table #{table.tableNumber}</p>
@@ -108,15 +123,19 @@ const TablesPage = () => {
                 <button type="button" className="btn-ghost flex-1 text-xs px-2" onClick={() => setEditingTable(table)}>
                   Edit
                 </button>
-                <button type="button" className="btn-ghost flex-1 text-xs px-2" onClick={() => openQr(table._id)}>
+                <button type="button" className="btn-ghost flex-1 text-xs px-2" onClick={() => openQr(table)}>
                   QR Code
                 </button>
                 <button
                   type="button"
                   className="btn-ghost text-danger hover:bg-danger/10 hover:text-danger flex-1 text-xs px-2"
                   onClick={async () => {
-                    await api.deleteTable(table._id);
-                    await loadTables();
+                    try {
+                      await api.deleteTable(table.id || table._id);
+                      await loadTables();
+                    } catch (error) {
+                      console.error('Failed to delete table:', error);
+                    }
                   }}
                 >
                   Delete

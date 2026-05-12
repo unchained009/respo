@@ -2,8 +2,10 @@ import crypto from 'crypto';
 
 export const generateAccessToken = () => crypto.randomBytes(18).toString('hex');
 
-export const buildGuestAccessUrl = (restaurantSlug, accessToken) =>
-  `${process.env.APP_BASE_URL}/r/${encodeURIComponent(restaurantSlug)}/access/${encodeURIComponent(accessToken)}`;
+export const buildGuestAccessUrl = (restaurantSlug, accessToken) => {
+  const baseUrl = process.env.APP_BASE_URL || 'http://localhost:5173';
+  return `${baseUrl}/r/${encodeURIComponent(restaurantSlug)}/access/${encodeURIComponent(accessToken)}`;
+};
 
 export const buildRestaurantSlug = (value) =>
   value
